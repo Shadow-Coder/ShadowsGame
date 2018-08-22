@@ -3,6 +3,6 @@ public abstract class Hero extends GameObject
 {
 	public Hero ()
 	{
-		//Test 3
+		//Test from Troll
 	}
 }
