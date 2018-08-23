@@ -1,4 +1,4 @@
-package ShadowGaming;
+package Moria;
 public abstract class Hero extends GameObject
 {
 	public Hero ()

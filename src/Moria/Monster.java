@@ -1,4 +1,4 @@
-package ShadowGaming;
+package Moria;
 public abstract class Monster extends GameObject
 {
 	
