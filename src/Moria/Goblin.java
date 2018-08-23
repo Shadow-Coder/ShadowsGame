@@ -1,4 +1,4 @@
-package ShadowGaming;
+package Moria;
 public class Goblin extends Monster{
 
 	public Goblin() 
