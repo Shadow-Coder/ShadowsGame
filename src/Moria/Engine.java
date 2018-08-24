@@ -97,13 +97,50 @@ public class Engine
 	public String NextTurn(String Turn)
 	{
 		String _result = "";
+		
+		int newx = 0;
+		int newy = 0;
+		
 		if(Turn == "w")
 		{
-			_result = MoveCharacter(C.x-1, C.y, 0);
+		
+			newx = C.x-1;
+			newy = C.y;
+			//_result = MoveCharacter(C.x-1, C.y, 0);
 			
+		}
+		if(Turn == "s") 
+		{
+			newx = C.x+1;
+			newy = C.y;
+			//_result = MoveCharacter(C.x+1, C.y, 0);
+		}
+		if(Turn == "d")
+		{
+			newy = C.y+1;
+			newx = C.x;
+			//_result = MoveCharacter(C.x,C.y+1, 0);
+		}
+		if(Turn == "a")
+		{
+			newy = C.y-1;
+			newx = C.x;
+			
+			//_result = MoveCharacter(C.x,C.y-1, 0);
+		}
+		
+		GameObject o = this.GetGameObjectAt(newx, newy, 0);
+		if(o.Symbol == "#")
+		{
+			return "";
+		}
+		if(o.Symbol == ".") 
+		{
+			MoveCharacter(newx,newy, 0);
 		}
 		
 		return _result;
+		
 	}
 	
 	private String MoveCharacter(int x, int y, int z)
@@ -112,13 +149,15 @@ public class Engine
 		
 		// RETURN PREVIOUS OBJECT TO CHARACTER CURRENT LOCATION BEFORE MOVING
 		this._map[this._pObject.x][this._pObject.y] = _pObject;			
-		C.x = C.x-1;
+		//C.x = C.x-1;
 		
 		// TRACK OBJECT IN SPOT WHERE THE CHARACTER WILL BE MOVING
-		_pObject = _map[C.x][C.y];
+		_pObject = _map[x][y];
 		
 		// MOVE CHARACTER TO THE SPECIFIED SPOT
-		this._map[C.x][C.y] = C;		
+		this._map[x][y] = C;	
+		C.x = x;
+		C.y = y;
 		
 		// RETURN OUR RESULT MESSAGE
 		return _result;

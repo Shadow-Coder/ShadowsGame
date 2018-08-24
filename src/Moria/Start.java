@@ -72,7 +72,19 @@ public class Start extends JPanel implements ActionListener {
 		{
 			result = e.NextTurn("w");
 		}
-		
+		if(input.equals("s"))
+		{
+			result = e.NextTurn("s");
+		}
+		if(input.equals("d")) 
+		{
+			result = e.NextTurn("d");
+		}
+		if(input.equals("a"))
+		{
+			result = e.NextTurn("a");
+		}
+			
 		this.textConsole.setText(result);
 		
 			
