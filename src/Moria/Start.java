@@ -46,16 +46,15 @@ public class Start extends JPanel implements ActionListener {
 		textConsole.setText("Starting Moria in Java!!!");
 		this.add(textConsole, c);
 		
+		Dimension d = new Dimension();
+		d.setSize(500, 500);
+		this.setPreferredSize(d);
+		
 		e = new Engine(20,10);
 		
 		// CREATE A TEST MONSTER AND ADD TO GAME
-		Goblin g = new Goblin();
-		g.Hp = 100;
-		g.Symbol = "G";
-		g.x = 1;
-		g.y = 1;
 		
-		e.addEntity(g);
+		//CREATE A TEST HAMMER AND ASSIGN AS PRIMARY WEAPON			
 		this.printMap();
 	}
 	

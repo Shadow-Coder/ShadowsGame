@@ -17,7 +17,7 @@ public abstract class GameObject {
 		
 	}
 	
-	public void SetSymbol(String s)
+	public void setSymbol(String s)
 	{
 		this.Symbol = s;
 	}

@@ -4,7 +4,7 @@ public class Character extends Entity {
 
 	public Character() 
 	{
-		this.SetSymbol("@");
+		this.setSymbol("@");
 	}
 
 }

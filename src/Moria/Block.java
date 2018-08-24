@@ -1,6 +1,6 @@
 package Moria;
 
-public abstract class Block extends GameObject
+public abstract class Block extends GameObject 
 {
 	// SET PROPERTIES HERE
 	Boolean Breakable = true;

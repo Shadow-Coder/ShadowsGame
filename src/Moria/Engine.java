@@ -44,6 +44,8 @@ public class Engine
 			C.x = 5;
 			C.y = 5;
 			
+			
+			
 			this._entityMap.addGameObject(C);
 		}
 	}
@@ -230,5 +232,21 @@ public class Engine
 	public void addEntity(Entity e)
 	{
 		this._entityMap.addGameObject(e);
+	}
+	
+	public void addItem(Item i)
+	{
+		this._itemMap.addGameObject(i);
+	}
+	
+	
+	public void setCharacterPrimaryWeapon(Weapon w)
+	{
+		C.PrimaryWeapon = w;
+	}
+	
+	public void setCharacterSecondaryWeapon(Weapon w)
+	{
+		C.SecondaryWeapon = w;
 	}
 }
