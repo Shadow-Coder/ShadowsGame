@@ -42,10 +42,20 @@ public class Start extends JPanel implements ActionListener {
 		this.add(scrollPane, c);
 		
 		textConsole = new JTextField(5);
+		textConsole.setEditable(false);
 		textConsole.setText("Starting Moria in Java!!!");
 		this.add(textConsole, c);
 		
 		e = new Engine(20,10);
+		
+		// CREATE A TEST MONSTER AND ADD TO GAME
+		Goblin g = new Goblin();
+		g.Hp = 100;
+		g.Symbol = "G";
+		g.x = 1;
+		g.y = 1;
+		
+		e.addEntity(g);
 		this.printMap();
 	}
 	
@@ -61,48 +71,46 @@ public class Start extends JPanel implements ActionListener {
 	@Override
     public void actionPerformed(ActionEvent evt) 
 	{
+		// GET USER INPUT AND EVALUATE BEFORE TAKING NEXT TURN
+		String input = this.textField.getText();		
+		this.nextTurn(input);	
+    }
+	
+	private void nextTurn(String Input)
+	{
 		String result = "";
-		// THIS IS WHERE WE WILL CAPTURE USER INPUT AND PROCESS TURNS
-		//
 		
-		// USER INPUT
-		String input = this.textField.getText();
-		
-		if(input.equals("w"))
+		// MOVE UP
+		if(Input.equals("w"))
 		{
 			result = e.NextTurn("w");
 		}
-		if(input.equals("s"))
+		//MOVE DOWN
+		if(Input.equals("s"))
 		{
 			result = e.NextTurn("s");
 		}
-		if(input.equals("d")) 
+		//MOVE RIGHT
+		if(Input.equals("d")) 
 		{
 			result = e.NextTurn("d");
 		}
-		if(input.equals("a"))
+		//MOVE LEFT
+		if(Input.equals("a"))
 		{
 			result = e.NextTurn("a");
 		}
-			
-		this.textConsole.setText(result);
-		
-			
 		
 		
-		this.printMap();		
-    }
+		this.textConsole.setText(result);		
+		this.printMap();
+	}
 	
 	private void printMap() 
 	{
 		textField.setText("");
-        textArea.setText(e.GetStringMap());
-        //textArea.append(text + newline);
-        //textField.selectAll();
- 
-        //Make sure the new text is visible, even if there
-        //was a selection in the text area.
-        textArea.setCaretPosition(textArea.getDocument().getLength());
+        textArea.setText(e.getStringMap());
+        //textArea.setCaretPosition(textArea.getDocument().getLength());
 	}
 
 	private static void createAndShowGUI()

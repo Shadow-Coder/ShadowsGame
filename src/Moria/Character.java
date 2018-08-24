@@ -1,6 +1,6 @@
 package Moria;
 
-public class Character extends Hero {
+public class Character extends Entity {
 
 	public Character() 
 	{
