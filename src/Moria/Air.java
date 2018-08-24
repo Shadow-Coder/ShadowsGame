@@ -1,15 +1,15 @@
 package Moria;
 
-public class Air extends Block
-{
+public class Air extends Block {
+	
 	public Air()
 	{
-		this.SetSymbol(".");
+		this.setSymbol(".");
 	}
 	
 	public Air(int x, int y)
 	{
-		this.SetSymbol(".");
+		this.setSymbol(".");
 		this.x = x;
 		this.y = y;
 	}

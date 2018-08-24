@@ -3,12 +3,14 @@ public class Wall extends Block
 {	
 	public Wall()
 	{
-		this.SetSymbol("#");
+		this.setSymbol("#");
+		this.Breakable = false;
 	}
 	
 	public Wall(int x, int y)
 	{		
-		this.SetSymbol("#");
+		this.setSymbol("#");
+		this.Breakable = false;
 		this.x = x;
 		this.y = y;
 	}

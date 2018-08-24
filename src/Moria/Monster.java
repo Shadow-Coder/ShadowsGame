@@ -1,9 +1,6 @@
 package Moria;
-public abstract class Monster extends GameObject
+public abstract class Monster extends Entity
 {
-	
-	public int Hp = 100;
-
 	public Monster() {
 		
 	}

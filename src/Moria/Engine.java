@@ -8,11 +8,13 @@ import java.util.*;
 public class Engine 
 {
 	private Boolean isRunning = false;
-	private GameObject[][] _map;
+	private Map _blockMap;
+	private Map _entityMap;
+	private Map _itemMap;
+	private float _turnCount = 0;	
 	private int _mapWidth;
 	private int _mapLength;
 	private Character C;
-	private GameObject _pObject;
 	
 	public int targetFps = 0;
 	
@@ -21,26 +23,34 @@ public class Engine
 		this._mapWidth = mapWidth;
 		this._mapLength = mapLength;
 		
+		// INITIALIZE THE BLOCK MAP
+		_blockMap = new Map(_mapWidth, _mapLength);
+		
+		// INITIALIZE THE ENTITY MAP
+		_entityMap = new Map(_mapWidth, _mapLength);
+		
+		// INITIALIZE THE ITEM MAP
+		_itemMap = new Map(_mapWidth, _mapLength);
+		
 		// IF GAME ENGINE IS LOADING FOR THE FIRST TIME
 		if(this.isRunning == false)
 		{
-			_map = new GameObject[_mapLength][_mapWidth];
-			this.loadMap(0);		
 			this.isRunning = true;
 			
-			// PLACE MAIN CHARACTER IN MAP
+			this.loadBlockMap(0);
+			
+			// PLACE MAIN CHARACTER IN THE ENTITY MAP
 			C = new Character();
 			C.x = 5;
 			C.y = 5;
 			
-			// TRACK PREVIOUS GAME OBJECT AT OUR CHARACTER LOCATION SO WE CAN PLACE IT BACK WHEN WE MOVE
-			_pObject = this._map[C.x][C.y];
 			
-			this._map[C.x][C.y] = C;
+			
+			this._entityMap.addGameObject(C);
 		}
 	}
 	
-	private void loadMap(int level)
+	private void loadBlockMap (int level)
 	{
 		try 
 		{
@@ -60,11 +70,11 @@ public class Engine
 				{
 					if(c == '#')
 					{
-						this._map[_currentRow][_currentCol] = new Wall(_currentRow, _currentCol);
+						this._blockMap.addGameObject(new Wall(_currentRow, _currentCol));
 					}
 					if(c == '0')
 					{
-						this._map[_currentRow][_currentCol] = new Air(_currentRow, _currentCol);
+						this._blockMap.addGameObject(new Air(_currentRow, _currentCol));
 					}
 					_currentCol++;
 				}
@@ -78,93 +88,165 @@ public class Engine
 		}
 	}
 	
-	public String GetStringMap()
-	{
-		String s = "";
-		for(int l=0; l < this._mapLength; l++)
-		{
-			for(int w=0; w < this._mapWidth; w++)
-			{
-				s = s + this._map[l][w].Symbol;
-			}	
-			//ADD NEW LINE
-			s = s + "\n";
-		}
-		
-		return s;
-	}
-
 	public String NextTurn(String Turn)
 	{
 		String _result = "";
 		
-		int newx = 0;
-		int newy = 0;
+		int x = 0;
+		int y = 0;
 		
 		if(Turn == "w")
 		{
-		
-			newx = C.x-1;
-			newy = C.y;
-			//_result = MoveCharacter(C.x-1, C.y, 0);
-			
+			x = C.x-1;
+			y = C.y;			
 		}
 		if(Turn == "s") 
 		{
-			newx = C.x+1;
-			newy = C.y;
-			//_result = MoveCharacter(C.x+1, C.y, 0);
+			x = C.x+1;
+			y = C.y;
 		}
 		if(Turn == "d")
 		{
-			newy = C.y+1;
-			newx = C.x;
-			//_result = MoveCharacter(C.x,C.y+1, 0);
+			y = C.y+1;
+			x = C.x;
 		}
 		if(Turn == "a")
 		{
-			newy = C.y-1;
-			newx = C.x;
-			
-			//_result = MoveCharacter(C.x,C.y-1, 0);
+			y = C.y-1;
+			x = C.x;
 		}
 		
-		GameObject o = this.GetGameObjectAt(newx, newy, 0);
-		if(o.Symbol == "#")
+		// GET GAME OBJECT AT POSITION WHERE CHARACTER IS TRYING TO MOVE
+		GameObject o = this.GetGameObjectAt(x, y);
+		
+		if(o.getClass().getName() == "Moria.Wall")
 		{
-			return "";
+			return "You cannot move through walls.";
 		}
-		if(o.Symbol == ".") 
+		if(o.getClass().getName()  == "Moria.Air") 
 		{
-			MoveCharacter(newx,newy, 0);
+			_result = MoveCharacter(x, y);
 		}
 		
+		this._turnCount++;
 		return _result;
-		
 	}
 	
-	private String MoveCharacter(int x, int y, int z)
+	private String MoveCharacter(int x, int y)
 	{
 		String _result = "";
 		
 		// RETURN PREVIOUS OBJECT TO CHARACTER CURRENT LOCATION BEFORE MOVING
-		this._map[this._pObject.x][this._pObject.y] = _pObject;			
-		//C.x = C.x-1;
+		GameObject o = this.GetGameObjectAt(x, y);
 		
-		// TRACK OBJECT IN SPOT WHERE THE CHARACTER WILL BE MOVING
-		_pObject = _map[x][y];
+		// MOVE CHARACTER TO THE SPECIFIED SPOT IF NOT A WALL OR OTHER ENTITY
+		if((o.getClass().getName() == "Moria.Entity" || o.getClass().getName() == "Moria.Wall"))
+		{
+			return "You cannot move to this location.";
+		}
 		
-		// MOVE CHARACTER TO THE SPECIFIED SPOT
-		this._map[x][y] = C;	
+
+		
+		this._entityMap.removeGameObjectAt(C.x, C.y);
 		C.x = x;
-		C.y = y;
+		C.y = y;		
+		this._entityMap.addGameObject(C);
+		
+		//C.x = x;
+		//C.y = y;
 		
 		// RETURN OUR RESULT MESSAGE
 		return _result;
 	}
 	
-	private GameObject GetGameObjectAt(int x, int y, int z)
+	private GameObject GetGameObjectAt(int x, int y)
 	{
-		return this._map[x][y];
+		// IF A MONSTER EXISTS AT A LOCATION, RETURN THAT MONSTER
+		// IF NO MONSTER THEN RETURN A GAME ITEM
+		// IF NO GAME ITEM EXISTS, RETURN THE BLOCK
+		GameObject o = this._entityMap.getGameObjectAt(x, y);
+		
+		if(o != null)
+		{
+			return o;
+		}
+		
+		o = this._itemMap.getGameObjectAt(x, y);
+		if(o != null)
+		{
+			return o;
+		}
+		
+		o = this._blockMap.getGameObjectAt(x, y);
+		if(o != null)
+		{
+			return o;
+		}
+		
+		return null;
+	}
+	
+	public String getStringMap()
+	{
+		String result = "";
+		
+		GameObject[][] map = new GameObject[this._mapLength][this._mapWidth];
+		
+		for(int x=0; x < _mapLength; x++)
+		{
+			for(int y=0; y < _mapWidth; y++)
+			{
+				// PLACE ALL BLOCKS
+				GameObject block = this._blockMap.getGameObjectAt(x, y);
+				map[x][y] = block;
+				
+				// GET ALL ITEMS AND PLACE IN MAP
+				GameObject item = this._itemMap.getGameObjectAt(x, y);
+				if(item != null)
+				{
+					map[x][y] = item;
+				}
+
+				// GET ALL ENTITIES AND PLACE IN MAP
+				GameObject entity = this._entityMap.getGameObjectAt(x, y);
+				if(entity != null)
+				{
+					map[x][y] = entity;
+				}				
+			}
+		}
+		
+		for(int x=0; x < _mapLength; x++)
+		{
+			for(int y=0; y < _mapWidth; y++)
+			{
+				GameObject o = map[x][y];
+				result = result + o.Symbol;				
+			}
+			result = result + "\n";
+		}
+		
+		return result;
+	}
+	
+	public void addEntity(Entity e)
+	{
+		this._entityMap.addGameObject(e);
+	}
+	
+	public void addItem(Item i)
+	{
+		this._itemMap.addGameObject(i);
+	}
+	
+	
+	public void setCharacterPrimaryWeapon(Weapon w)
+	{
+		C.PrimaryWeapon = w;
+	}
+	
+	public void setCharacterSecondaryWeapon(Weapon w)
+	{
+		C.SecondaryWeapon = w;
 	}
 }

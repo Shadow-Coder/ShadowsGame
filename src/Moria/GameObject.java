@@ -2,9 +2,10 @@ package Moria;
 
 public abstract class GameObject {
 	
+	public String Symbol;
 	public int x;
 	public int y;
-	public String Symbol;
+	
 	
 	public GameObject()
 	{
@@ -16,7 +17,7 @@ public abstract class GameObject {
 		
 	}
 	
-	public void SetSymbol(String s)
+	public void setSymbol(String s)
 	{
 		this.Symbol = s;
 	}
