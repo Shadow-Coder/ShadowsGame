@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
+import Moria.*;
 
 public class Engine 
 {
@@ -42,10 +43,7 @@ public class Engine
 			// PLACE MAIN CHARACTER IN THE ENTITY MAP
 			C = new Character();
 			C.x = 5;
-			C.y = 5;
-			
-			
-			
+			C.y = 5;				
 			this._entityMap.addGameObject(C);
 		}
 	}
@@ -117,8 +115,21 @@ public class Engine
 		}
 		
 		// GET GAME OBJECT AT POSITION WHERE CHARACTER IS TRYING TO MOVE
+		//
 		GameObject o = this.GetGameObjectAt(x, y);
 		
+		// DETERMINE IF REQUESTED MOVE IS A MELEE ATTACK
+		//
+		Class c = o.getClass();
+		
+		if(o.Symbol == "M")
+		{
+			// DETERMINE IF WE CAN DAMAGE THIS ENTITY
+			
+		}
+		
+		// IF NOT A MELEE ATTACK DETERMINE IF CHARACTER CAN MOVE TO THE REQUESTED LOCATION
+		//
 		if(o.getClass().getName() == "Moria.Wall")
 		{
 			return "You cannot move through walls.";
@@ -128,6 +139,8 @@ public class Engine
 			_result = MoveCharacter(x, y);
 		}
 		
+		// TURN COMPLETED -- INCREMENT TURN COUNTER AND RETURN STRING MESSAGE
+		//
 		this._turnCount++;
 		return _result;
 	}
@@ -243,10 +256,11 @@ public class Engine
 	public void setCharacterPrimaryWeapon(Weapon w)
 	{
 		C.PrimaryWeapon = w;
+		
 	}
 	
-	public void setCharacterSecondaryWeapon(Weapon w)
-	{
-		C.SecondaryWeapon = w;
-	}
+	//public void setCharacterSecondaryWeapon(Weapon w)
+	//{
+	//	C.SecondaryWeapon = w;
+	//}
 }

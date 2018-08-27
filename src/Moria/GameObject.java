@@ -11,12 +11,7 @@ public abstract class GameObject {
 	{
 		
 	}
-	
-	public void takeDamage()
-	{
 		
-	}
-	
 	public void setSymbol(String s)
 	{
 		this.Symbol = s;

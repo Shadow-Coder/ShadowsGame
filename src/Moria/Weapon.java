@@ -1,8 +1,11 @@
 package Moria;
 
-public abstract class  Weapon extends Item {
+public class Weapon extends Item 
+{
+	
 	public Weapon()
 	{
 		
 	}
+
 }

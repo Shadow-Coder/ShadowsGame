@@ -16,6 +16,8 @@ public class Start extends JPanel implements ActionListener {
 	
 	public Start()
 	{
+		// START USER INTERFACE SETUP 
+		//
 		super(new GridBagLayout());
 		
 		textField = new JTextField(20);
@@ -50,16 +52,39 @@ public class Start extends JPanel implements ActionListener {
 		d.setSize(500, 500);
 		this.setPreferredSize(d);
 		
+		// END USER INTERFACE SETUP 
+		//
+		
+		// INITIALIZE THE GAME ENGINE
 		e = new Engine(20,10);
 		
 		// CREATE A TEST MONSTER AND ADD TO GAME
+		Goblin g = new Goblin( 5, 4);
+		g.Hp = 100;
+		g.MaxHp = 100;
+		g.setSymbol("M");
 		
-		//CREATE A TEST HAMMER AND ASSIGN AS PRIMARY WEAPON			
+		e.addEntity(g);
+				
+		
+		//CREATE A TEST HAMMER AND ASSIGN AS PRIMARY WEAPON
+	
+		Hammer H = new Hammer();
+		H.setSymbol("|");
+		H.dRolls = 50;
+		H.dSides = 180;
+		H.name = "The Admin Hammer";
+		H.x = 1;		
+		H.y = 1;
+		e.setCharacterPrimaryWeapon(H);
+		
 		this.printMap();
 	}
 	
 	public static void main(String[] args)
 	{		
+		// ENTRY POINT FOR OUR APPLICATION 
+		//
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run(){
 				createAndShowGUI();
@@ -71,6 +96,7 @@ public class Start extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent evt) 
 	{
 		// GET USER INPUT AND EVALUATE BEFORE TAKING NEXT TURN
+		//
 		String input = this.textField.getText();		
 		this.nextTurn(input);	
     }
