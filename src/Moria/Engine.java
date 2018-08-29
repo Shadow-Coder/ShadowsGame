@@ -135,7 +135,7 @@ public class Engine
 			if(((Moria.Entity)o).Hp == 0)
 			{
 				// REMOVE DEAD ENTITY
-				this.
+
 				return "You killed the " + ((Moria.Entity)o).Name + ".";
 			}
 		}
