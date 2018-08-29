@@ -4,6 +4,7 @@ public class Goblin extends Monster {
 	public Goblin(int x, int y) 
 	{
 		this.Symbol = "G";
+		this.Name = "Ancient Goblin";
 		this.IsMonster = true;
 		this.Hp = 100;
 		this.MaxHp = 100;
