@@ -116,25 +116,38 @@ public class Engine
 		
 		// GET GAME OBJECT AT POSITION WHERE CHARACTER IS TRYING TO MOVE
 		//
-		GameObject o = this.GetGameObjectAt(x, y);
+		GameObject o = this.getGameObjectAt(x, y);
 		
 		// DETERMINE IF REQUESTED MOVE IS A MELEE ATTACK
 		//
-		Class c = o.getClass();
-		
-		if(o.Symbol == "M")
+		// DETERMINE IF OBJECT WHERE WE WANT TO MOVE IS AN ENTITY THAT CAN BE DAMAGED
+		if(o instanceof Moria.Entity)
 		{
 			// DETERMINE IF WE CAN DAMAGE THIS ENTITY
+			//	
 			
+			// DAMAGE ENTITY
+			//
+			((Moria.Entity)o).takeDamage(100);
+			
+			// CHECK IF ENTITY IS STILL ALIVE
+			//
+			if(((Moria.Entity)o).Hp == 0)
+			{
+				// REMOVE DEAD ENTITY
+
+				return "You killed the " + ((Moria.Entity)o).Name + ".";
+			}
 		}
 		
 		// IF NOT A MELEE ATTACK DETERMINE IF CHARACTER CAN MOVE TO THE REQUESTED LOCATION
 		//
-		if(o.getClass().getName() == "Moria.Wall")
+		if(o instanceof Moria.Wall)
 		{
 			return "You cannot move through walls.";
 		}
-		if(o.getClass().getName()  == "Moria.Air") 
+		
+		if(o instanceof Moria.Air) 
 		{
 			_result = MoveCharacter(x, y);
 		}
@@ -150,29 +163,24 @@ public class Engine
 		String _result = "";
 		
 		// RETURN PREVIOUS OBJECT TO CHARACTER CURRENT LOCATION BEFORE MOVING
-		GameObject o = this.GetGameObjectAt(x, y);
+		GameObject o = this.getGameObjectAt(x, y);
 		
 		// MOVE CHARACTER TO THE SPECIFIED SPOT IF NOT A WALL OR OTHER ENTITY
-		if((o.getClass().getName() == "Moria.Entity" || o.getClass().getName() == "Moria.Wall"))
+		if((o instanceof Moria.Entity || o instanceof Moria.Wall))
 		{
 			return "You cannot move to this location.";
 		}
-		
-
 		
 		this._entityMap.removeGameObjectAt(C.x, C.y);
 		C.x = x;
 		C.y = y;		
 		this._entityMap.addGameObject(C);
 		
-		//C.x = x;
-		//C.y = y;
-		
 		// RETURN OUR RESULT MESSAGE
 		return _result;
 	}
 	
-	private GameObject GetGameObjectAt(int x, int y)
+	private GameObject getGameObjectAt(int x, int y)
 	{
 		// IF A MONSTER EXISTS AT A LOCATION, RETURN THAT MONSTER
 		// IF NO MONSTER THEN RETURN A GAME ITEM
